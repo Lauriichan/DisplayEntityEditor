@@ -32,14 +32,37 @@ public class OffhandSwap implements Listener {
 
         ItemStack item = player.getInventory().getItemInMainHand();
         String toolValue = Utilities.getToolValue(item);
-        Collection<Display> displays = editingHandler.getEditingDisplays(player, true);
-
-        if (displays == null) {
-            player.sendMessage(Utilities.getErrorMessageFormat(DisplayEntityEditor.messageManager.getString("generic_fail")));
-            return;
-        }
 
         if (toolValue == null) {
+            return;
+        }
+        
+        switch(toolValue) {
+        case "InventoryToolSelectionMode" -> {
+            Utilities.sendActionbarMessage(player, DisplayEntityEditor.messageManager.getString("value_reset"));
+            player.getPersistentDataContainer().remove(DisplayEntityEditor.toolSelectionModeKey);
+            return;
+        }
+        case "InventoryToolSelectionRange" -> {
+            Utilities.sendActionbarMessage(player, DisplayEntityEditor.messageManager.getString("value_reset"));
+            player.getPersistentDataContainer().remove(DisplayEntityEditor.toolSelectionRangeKey);
+            return;
+        }
+        case "InventoryToolSelectionSearchMode" -> {
+            Utilities.sendActionbarMessage(player, DisplayEntityEditor.messageManager.getString("value_reset"));
+            player.getPersistentDataContainer().remove(DisplayEntityEditor.toolSelectionSearchModeKey);
+            return;
+        }
+        case "InventoryToolSelectionMultiple" -> {
+            Utilities.sendActionbarMessage(player, DisplayEntityEditor.messageManager.getString("value_reset"));
+            player.getPersistentDataContainer().remove(DisplayEntityEditor.toolSelectionMultipleKey);
+            return;
+        }
+        }
+        
+        Collection<Display> displays = editingHandler.getEditingDisplays(player);
+        if (displays == null) {
+            player.sendMessage(Utilities.getErrorMessageFormat(DisplayEntityEditor.messageManager.getString("generic_fail")));
             return;
         }
         Utilities.sendActionbarMessage(player, DisplayEntityEditor.messageManager.getString("value_reset"));

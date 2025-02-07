@@ -29,7 +29,6 @@ public final class DisplayEntityEditor extends JavaPlugin {
     public static ConversationFactory conversationFactory;
     public static InventoryFactory inventoryFactory;
     public static HashMap<UUID, Display> currentEditMap = new HashMap<>();
-    public static NamespacedKey toolPrecisionKey;
     public static boolean alternateTextInput = false;
     public static boolean useMiniMessageFormat = false;
     public static MiniMessage miniMessage = MiniMessage.builder()
@@ -48,6 +47,13 @@ public final class DisplayEntityEditor extends JavaPlugin {
             )
             .build();
     public static MessageManager messageManager;
+
+    public static NamespacedKey toolSelectionModeKey;
+    public static NamespacedKey toolSelectionRangeKey;
+    public static NamespacedKey toolSelectionMultipleKey;
+    public static NamespacedKey toolSelectionSearchModeKey;
+    public static NamespacedKey toolPrecisionKey;
+    public static NamespacedKey toolKey;
 
     private EditingHandler editingHandler;
 
@@ -81,7 +87,13 @@ public final class DisplayEntityEditor extends JavaPlugin {
         Bukkit.getPluginManager().registerEvents(new InventoryClose(), plugin);
         Bukkit.getPluginManager().registerEvents(new PlayerJoin(), plugin);
         Bukkit.getPluginManager().registerEvents(new PlayerLeave(), plugin);
+        
+        toolSelectionModeKey = new NamespacedKey(plugin, "toolSelectionMode");
+        toolSelectionRangeKey = new NamespacedKey(plugin, "toolSelectionRange");
+        toolSelectionMultipleKey = new NamespacedKey(plugin, "toolSelectionMultiple");
+        toolSelectionSearchModeKey = new NamespacedKey(plugin, "toolSelectionSearchMode");
         toolPrecisionKey = new NamespacedKey(plugin, "toolPrecision");
+        toolKey = new NamespacedKey(plugin, "tool");
 
         new Metrics(plugin, 18672);
 

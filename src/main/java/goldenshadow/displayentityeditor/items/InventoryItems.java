@@ -1,7 +1,11 @@
 package goldenshadow.displayentityeditor.items;
 
 import goldenshadow.displayentityeditor.DisplayEntityEditor;
+import goldenshadow.displayentityeditor.SelectionMode;
 import goldenshadow.displayentityeditor.Utilities;
+
+import java.util.ArrayList;
+
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
@@ -367,6 +371,65 @@ public class InventoryItems {
     }
 
     /**
+     * Creates the tool selection mode item
+     * @return The item
+     */
+    public ItemStack toolSelectionMode(Player p) {
+        ItemStack itemStack = new ItemStack(Material.COMPASS);
+        SelectionMode mode = Utilities.getToolSelectMode(p);
+        ArrayList<String> lore = new ArrayList<>();
+        lore.addAll(DisplayEntityEditor.messageManager.getList("tool_selection_mode_lore_start"));
+        lore.addAll(DisplayEntityEditor.messageManager.getList("tool_selection_mode_description_" + mode.id()));
+        lore.addAll(DisplayEntityEditor.messageManager.getList("tool_selection_mode_lore_end"));
+        Utilities.setMeta(itemStack, DisplayEntityEditor.messageManager.getString("tool_selection_mode_name"),
+                lore,
+                "InventoryToolSelectionMode",
+                Utilities.getObjectNameMessage(mode),
+                Utilities.reduceFloatLength(Double.toString(Utilities.getToolSelectRange(p)))
+        );
+        return itemStack;
+    }
+
+    /**
+     * Creates the tool selection range item
+     * @return The item
+     */
+    public ItemStack toolSelectionRange() {
+        ItemStack itemStack = new ItemStack(Material.SPECTRAL_ARROW);
+        Utilities.setMeta(itemStack, DisplayEntityEditor.messageManager.getString("tool_selection_range_name"),
+                DisplayEntityEditor.messageManager.getList("tool_selection_range_lore"),
+                "InventoryToolSelectionRange"
+        );
+        return itemStack;
+    }
+
+    /**
+     * Creates the tool selection search mode item
+     * @return The item
+     */
+    public ItemStack toolSearchMode() {
+        ItemStack itemStack = new ItemStack(Material.CLOCK);
+        Utilities.setMeta(itemStack, DisplayEntityEditor.messageManager.getString("tool_selection_search_mode_name"),
+                DisplayEntityEditor.messageManager.getList("tool_selection_search_mode_lore"),
+                "InventoryToolSelectionSearchMode"
+        );
+        return itemStack;
+    }
+
+    /**
+     * Creates the tool selection multiple item
+     * @return The item
+     */
+    public ItemStack toolSelectionMultiple() {
+        ItemStack itemStack = new ItemStack(Material.CHEST);
+        Utilities.setMeta(itemStack, DisplayEntityEditor.messageManager.getString("tool_selection_multiple_name"),
+                DisplayEntityEditor.messageManager.getList("tool_selection_multiple_lore"),
+                "InventoryToolSelectionMultiple"
+        );
+        return itemStack;
+    }
+
+    /**
      * Creates the clone item
      * @return The item
      */
@@ -388,7 +451,7 @@ public class InventoryItems {
         Utilities.setMeta(itemStack, DisplayEntityEditor.messageManager.getString("group_select_name"),
                 DisplayEntityEditor.messageManager.getList("group_select_lore"),
                 "InventoryGroupSelect",
-                Utilities.reduceFloatLength(Double.toString(Utilities.getToolPrecision(p)))
+                Utilities.reduceFloatLength(Double.toString(Utilities.getToolSelectRange(p)))
         );
         return itemStack;
     }

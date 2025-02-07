@@ -2,7 +2,6 @@ package goldenshadow.displayentityeditor;
 
 import net.md_5.bungee.api.ChatMessageType;
 import net.md_5.bungee.api.chat.*;
-import net.md_5.bungee.api.chat.hover.content.Content;
 import net.md_5.bungee.api.chat.hover.content.Text;
 import org.bukkit.ChatColor;
 import org.bukkit.Color;
@@ -14,11 +13,13 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.persistence.PersistentDataType;
 
+import goldenshadow.displayentityeditor.enums.LockSearchMode;
+
 import javax.annotation.Nullable;
 import java.util.List;
 
 public class Utilities {
-
+    
     /**
      * Used to easily set an items meta
      * @param item The item
@@ -32,7 +33,7 @@ public class Utilities {
         meta.setDisplayName(ChatColor.translateAlternateColorCodes('&' ,name));
         lore.replaceAll(textToTranslate -> ChatColor.translateAlternateColorCodes('&', textToTranslate));
         meta.setLore(lore);
-        meta.getPersistentDataContainer().set(new NamespacedKey(DisplayEntityEditor.getPlugin(), "tool"), PersistentDataType.STRING, data);
+        meta.getPersistentDataContainer().set(DisplayEntityEditor.toolKey, PersistentDataType.STRING, data);
 
         meta.addItemFlags(ItemFlag.values());
         meta.setUnbreakable(true);
@@ -53,7 +54,7 @@ public class Utilities {
         meta.setDisplayName(ChatColor.translateAlternateColorCodes('&' ,name));
         lore.replaceAll(textToTranslate -> ChatColor.translateAlternateColorCodes('&', textToTranslate).formatted(formatData));
         meta.setLore(lore);
-        meta.getPersistentDataContainer().set(new NamespacedKey(DisplayEntityEditor.getPlugin(), "tool"), PersistentDataType.STRING, data);
+        meta.getPersistentDataContainer().set(DisplayEntityEditor.toolKey, PersistentDataType.STRING, data);
 
         meta.addItemFlags(ItemFlag.values());
         meta.setUnbreakable(true);
@@ -67,7 +68,7 @@ public class Utilities {
      */
     public static boolean hasDataKey(ItemStack item) {
         if (item.getItemMeta() != null) {
-            return item.getItemMeta().getPersistentDataContainer().has(new NamespacedKey(DisplayEntityEditor.getPlugin(), "tool"), PersistentDataType.STRING);
+            return item.getItemMeta().getPersistentDataContainer().has(DisplayEntityEditor.toolKey, PersistentDataType.STRING);
         }
         return false;
     }
@@ -79,7 +80,7 @@ public class Utilities {
      */
     public static String getToolValue(ItemStack item) {
         if (item.getItemMeta() != null) {
-            return item.getItemMeta().getPersistentDataContainer().get(new NamespacedKey(DisplayEntityEditor.getPlugin(), "tool"), PersistentDataType.STRING);
+            return item.getItemMeta().getPersistentDataContainer().get(DisplayEntityEditor.toolKey, PersistentDataType.STRING);
         }
         return null;
     }
@@ -201,7 +202,29 @@ public class Utilities {
         else if (object instanceof ItemDisplay.ItemDisplayTransform t) {
             return DisplayEntityEditor.messageManager.getList("item_display_transform").get(t.ordinal());
         }
+        else if (object instanceof LockSearchMode m) {
+            return DisplayEntityEditor.messageManager.getList("lock_search_mode").get(m.ordinal());
+        }
+        else if (object instanceof SelectionMode m) {
+            return DisplayEntityEditor.messageManager.getList("selection_mode").get(m.index());
+        }
         else return "";
+    }
+    
+    public static SelectionMode getToolSelectMode(Player p) {
+        return SelectionMode.get(p.getPersistentDataContainer().getOrDefault(DisplayEntityEditor.toolSelectionModeKey, PersistentDataType.STRING, "nearby"));
+    }
+    
+    public static LockSearchMode getToolSearchMode(Player p) {
+        return LockSearchMode.valueOf(p.getPersistentDataContainer().getOrDefault(DisplayEntityEditor.toolSelectionSearchModeKey, PersistentDataType.STRING, "UNLOCKED"));
+    }
+    
+    public static boolean getToolSelectMultiple(Player p) {
+        return p.getPersistentDataContainer().getOrDefault(DisplayEntityEditor.toolSelectionMultipleKey,  PersistentDataType.BOOLEAN, false);
+    }
+    
+    public static float getToolSelectRange(Player p) {
+        return p.getPersistentDataContainer().getOrDefault(DisplayEntityEditor.toolSelectionRangeKey,  PersistentDataType.DOUBLE, 5d).floatValue();
     }
 
     public static float getToolPrecision(Player p) {

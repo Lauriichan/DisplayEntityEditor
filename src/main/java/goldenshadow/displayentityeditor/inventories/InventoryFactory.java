@@ -158,20 +158,22 @@ public class InventoryFactory {
         ItemStack[] array = new ItemStack[36];
 
         array[0] = inventoryItems.gui();
-        array[1] = inventoryItems.rotateYaw(p);
-        array[2] = inventoryItems.rotatePitch(p);
-        array[3] = inventoryItems.moveX(p);
-        array[4] = inventoryItems.moveY(p);
-        array[5] = inventoryItems.moveZ(p);
-        array[6] = inventoryItems.toolPrecision();
+        array[1] = inventoryItems.cloneTool();
+        array[2] = inventoryItems.groupSelectTool(p);
+        array[3] = inventoryItems.toolSearchMode();
+        array[4] = inventoryItems.toolSelectionMode(p);
+        array[6] = inventoryItems.toolSelectionMultiple();
+        array[5] = inventoryItems.toolSelectionRange();
+        array[7] = inventoryItems.toolPrecision();
 
         array[27] = inventoryItems.spawnItemDisplay();
         array[28] = inventoryItems.spawnBlockDisplay();
         array[29] = inventoryItems.spawnTextDisplay();
-        array[30] = inventoryItems.centerPivot();
-        array[31] = inventoryItems.highlightTarget();
-        array[32] = inventoryItems.unlock();
-        array[33] = inventoryItems.centerOnBlock();
+        array[30] = inventoryItems.moveX(p);
+        array[31] = inventoryItems.moveY(p);
+        array[32] = inventoryItems.moveZ(p);
+        array[33] = inventoryItems.rotateYaw(p);
+        array[34] = inventoryItems.rotatePitch(p);
 
         array[18] = inventoryItems.translationX(p);
         array[19] = inventoryItems.translationY(p);
@@ -179,7 +181,8 @@ public class InventoryFactory {
         array[21] = inventoryItems.scaleX(p);
         array[22] = inventoryItems.scaleY(p);
         array[23] = inventoryItems.scaleZ(p);
-        array[24] = inventoryItems.cloneTool();
+        array[24] = inventoryItems.highlightTarget();
+        array[25] = inventoryItems.unlock();
 
         array[9] = inventoryItems.leftRotationX(p);
         array[10] = inventoryItems.leftRotationY(p);
@@ -187,7 +190,8 @@ public class InventoryFactory {
         array[12] = inventoryItems.rightRotationX(p);
         array[13] = inventoryItems.rightRotationY(p);
         array[14] = inventoryItems.rightRotationZ(p);
-        array[15] = inventoryItems.groupSelectTool(p);
+        array[15] = inventoryItems.centerPivot();
+        array[16] = inventoryItems.centerOnBlock();
 
         return array;
     }
