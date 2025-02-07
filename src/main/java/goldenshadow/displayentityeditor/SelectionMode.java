@@ -8,10 +8,11 @@ import java.util.function.Predicate;
 import java.util.stream.Stream;
 
 import org.bukkit.Location;
+import org.bukkit.World;
 import org.bukkit.entity.Display;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
-import org.bukkit.util.RayTraceResult;
+import org.bukkit.util.Vector;
 
 import goldenshadow.displayentityeditor.enums.LockSearchMode;
 
@@ -22,7 +23,7 @@ public abstract class SelectionMode {
 
     private static final HashMap<String, SelectionMode> idToMode = new HashMap<>();
     private static final ArrayList<String> idOrder = new ArrayList<>();
-    
+
     public static int amount() {
         return idOrder.size();
     }
@@ -34,8 +35,9 @@ public abstract class SelectionMode {
     public static final SelectionMode NEARBY = new SelectionMode("nearby") {
 
         @Override
-        protected Stream<Display> select(Player p, double range) {
-            return p.getWorld().getNearbyEntities(p.getLocation(), range, range, range).stream().filter(DISPLAY_FILTER).map(DISPLAY_CAST);
+        protected Stream<Display> select(Player p, double range, Predicate<Display> lockFilter) {
+            return p.getWorld().getNearbyEntities(p.getLocation(), range, range, range).stream().filter(DISPLAY_FILTER).map(DISPLAY_CAST)
+                .filter(lockFilter);
         }
 
     };
@@ -43,12 +45,36 @@ public abstract class SelectionMode {
     public static final SelectionMode RAYCAST = new SelectionMode("raycast") {
 
         @Override
-        protected Stream<Display> select(Player p, double range) {
-            RayTraceResult result = p.getWorld().rayTraceEntities(p.getEyeLocation(), p.getEyeLocation().getDirection(), range, 0.1d);
-            if (result.getHitEntity() == null || !(result.getHitEntity() instanceof Display display)) {
-                return Stream.empty();
+        protected Stream<Display> select(Player p, double range, Predicate<Display> lockFilter) {
+            Location loc = p.getEyeLocation();
+            Vector direction = loc.getDirection().normalize();
+            double x = loc.getX();
+            double y = loc.getY();
+            double z = loc.getZ();
+            double dx = direction.getX();
+            double dy = direction.getY();
+            double dz = direction.getZ();
+            World world = p.getWorld();
+            List<Display> displays;
+            for (double distance = 0d; distance < range; distance += 0.25d) {
+                displays = world.getNearbyEntities(loc = new Location(world, x + dx * distance, y + dy * distance, z + dz * distance),
+                    0.8d, 0.25d, 0.8d).stream().filter(DISPLAY_FILTER).map(DISPLAY_CAST).filter(lockFilter).toList();
+                if (displays.isEmpty()) {
+                    continue;
+                }
+                double tmp;
+                Display closest = null;
+                distance = Double.MAX_VALUE;
+                for (Display display : displays) {
+                    tmp = loc.distanceSquared(display.getLocation());
+                    if (tmp < distance) {
+                        distance = tmp;
+                        closest = display;
+                    }
+                }
+                return Stream.of(closest);
             }
-            return Stream.of(display);
+            return Stream.empty();
         }
 
     };
@@ -64,23 +90,23 @@ public abstract class SelectionMode {
     public final String id() {
         return id;
     }
-    
+
     public final int index() {
         return idOrder.indexOf(id);
     }
-    
+
     public final SelectionMode previousMode() {
         int i = idOrder.indexOf(id);
         return idToMode.get(i == 0 ? idOrder.get(idOrder.size() - 1) : idOrder.get(i - 1));
     }
-    
+
     public final SelectionMode nextMode() {
         int i = idOrder.indexOf(id);
         return idToMode.get(i + 1 == idOrder.size() ? idOrder.get(0) : idOrder.get(i + 1));
     }
 
     public final List<Display> select(Player p, LockSearchMode lockSearchMode) {
-        List<Display> displays = select(p, Utilities.getToolSelectRange(p)).filter(lockSearchMode.getPredicate()).toList();
+        List<Display> displays = select(p, Utilities.getToolSelectRange(p), lockSearchMode.getPredicate()).toList();
         if (displays.isEmpty()) {
             return null;
         }
@@ -104,6 +130,6 @@ public abstract class SelectionMode {
         return List.of(closest);
     }
 
-    protected abstract Stream<Display> select(Player p, double range);
+    protected abstract Stream<Display> select(Player p, double range, Predicate<Display> lockFilter);
 
 }
