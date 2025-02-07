@@ -20,6 +20,7 @@ import java.math.RoundingMode;
 import java.text.DecimalFormat;
 import java.util.Collection;
 import java.util.HashSet;
+import java.util.function.Predicate;
 
 public class Interact implements Listener {
 
@@ -654,10 +655,11 @@ public class Interact implements Listener {
             case "InventoryGroupSelect" -> {
                 if (!player.isSneaking()) {
                     Collection<Display> group = new HashSet<>();
-                    double distance = Utilities.getToolPrecision(player);
+                    double distance = Utilities.getToolSelectRange(player);
+                    Predicate<Display> predicate = Utilities.getToolSearchMode(player).getPredicate();
                     for (Entity e : player.getNearbyEntities(distance,distance,distance)) {
                         if (e instanceof Display d) {
-                            if (!d.getScoreboardTags().contains("dee:locked")) {
+                            if (predicate.test(d)) {
                                 group.add(d);
                                 highlightEntity(d);
                             }
