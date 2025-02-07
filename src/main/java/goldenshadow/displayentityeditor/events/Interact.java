@@ -242,7 +242,7 @@ public class Interact implements Listener {
                 return;
             }
             case "InventoryUnlock" -> {
-                Collection<Display> displays = editingHandler.getEditingDisplays(player, LockSearchMode.UNLOCKED);
+                Collection<Display> displays = editingHandler.getEditingDisplays(player, LockSearchMode.LOCKED);
 
                 if (displays == null) {
                     player.sendMessage(Utilities.getErrorMessageFormat(DisplayEntityEditor.messageManager.getString("unlock_fail")));
