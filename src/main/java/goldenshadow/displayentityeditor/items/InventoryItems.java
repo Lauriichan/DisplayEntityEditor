@@ -377,7 +377,7 @@ public class InventoryItems {
      * @return The item
      */
     public ItemStack toolSelectionMode(Player p) {
-        ItemStack itemStack = new ItemStack(Material.COMPASS);
+        ItemStack itemStack = new ItemStack(Material.RECOVERY_COMPASS);
         SelectionMode mode = Utilities.getToolSelectMode(p);
         ArrayList<String> lore = new ArrayList<>();
         lore.addAll(DisplayEntityEditor.messageManager.getList("tool_selection_mode_lore_start"));
