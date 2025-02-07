@@ -175,6 +175,10 @@ public class Interact implements Listener {
                                     p.getInventory().setItem(i, DisplayEntityEditor.inventoryFactory.getInventoryItems().scaleY(p));
                             case "InventorySZ" ->
                                     p.getInventory().setItem(i, DisplayEntityEditor.inventoryFactory.getInventoryItems().scaleZ(p));
+                            case "InventoryToolPrecision" -> 
+                                    p.getInventory().setItem(i, DisplayEntityEditor.inventoryFactory.getInventoryItems().toolPrecision(p));
+                            case "InventoryToolSelectionRange" ->
+                                    p.getInventory().setItem(i, DisplayEntityEditor.inventoryFactory.getInventoryItems().toolSelectionRange(p));
                             case "InventoryToolSelectionMode" ->
                                     p.getInventory().setItem(i, DisplayEntityEditor.inventoryFactory.getInventoryItems().toolSelectionMode(p));
                             case "InventoryGroupSelect" ->

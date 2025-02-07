@@ -163,8 +163,8 @@ public class InventoryFactory {
         array[3] = inventoryItems.toolSearchMode();
         array[4] = inventoryItems.toolSelectionMode(p);
         array[6] = inventoryItems.toolSelectionMultiple();
-        array[5] = inventoryItems.toolSelectionRange();
-        array[7] = inventoryItems.toolPrecision();
+        array[5] = inventoryItems.toolSelectionRange(p);
+        array[7] = inventoryItems.toolPrecision(p);
 
         array[27] = inventoryItems.spawnItemDisplay();
         array[28] = inventoryItems.spawnBlockDisplay();

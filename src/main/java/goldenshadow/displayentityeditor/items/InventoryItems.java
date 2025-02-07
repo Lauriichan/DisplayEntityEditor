@@ -361,11 +361,13 @@ public class InventoryItems {
      * Creates the tool precision item
      * @return The item
      */
-    public ItemStack toolPrecision() {
+    public ItemStack toolPrecision(Player p) {
+        float precision = Utilities.getToolPrecision(p);
         ItemStack itemStack = new ItemStack(Material.COMPARATOR);
         Utilities.setMeta(itemStack, DisplayEntityEditor.messageManager.getString("tool_precision_name"),
                 DisplayEntityEditor.messageManager.getList("tool_precision_lore"),
-                "InventoryToolPrecision"
+                "InventoryToolPrecision",
+                Utilities.reduceFloatLength(Double.toString(precision < 1 ? 0.1f : 1f))
         );
         return itemStack;
     }
@@ -394,11 +396,13 @@ public class InventoryItems {
      * Creates the tool selection range item
      * @return The item
      */
-    public ItemStack toolSelectionRange() {
+    public ItemStack toolSelectionRange(Player p) {
+        float range = Utilities.getToolSelectRange(p);
         ItemStack itemStack = new ItemStack(Material.SPECTRAL_ARROW);
         Utilities.setMeta(itemStack, DisplayEntityEditor.messageManager.getString("tool_selection_range_name"),
                 DisplayEntityEditor.messageManager.getList("tool_selection_range_lore"),
-                "InventoryToolSelectionRange"
+                "InventoryToolSelectionRange",
+                Utilities.reduceFloatLength(Double.toString(range < 2 ? 0.25f : 1f))
         );
         return itemStack;
     }
