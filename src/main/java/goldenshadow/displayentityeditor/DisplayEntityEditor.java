@@ -14,6 +14,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.NamespacedKey;
 import org.bukkit.conversations.ConversationFactory;
 import org.bukkit.entity.Display;
+import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.io.*;
@@ -114,6 +115,13 @@ public final class DisplayEntityEditor extends JavaPlugin {
             }
         }
 
+    }
+    
+    @Override
+    public void onDisable() {
+        for (Player player : Bukkit.getOnlinePlayers()) {
+            Command.returnInventory(player);
+        }
     }
 
     /**
