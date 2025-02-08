@@ -58,7 +58,7 @@ public abstract class SelectionMode {
             List<Display> displays;
             for (double distance = 0d; distance < range; distance += 0.25d) {
                 displays = world.getNearbyEntities(loc = new Location(world, x + dx * distance, y + dy * distance, z + dz * distance),
-                    0.5d, 0.25d, 0.5d).stream().filter(DISPLAY_FILTER).map(DISPLAY_CAST).filter(lockFilter).toList();
+                    0.75d, 0.25d, 0.75d).stream().filter(DISPLAY_FILTER).map(DISPLAY_CAST).filter(lockFilter).toList();
                 if (displays.isEmpty()) {
                     continue;
                 }
